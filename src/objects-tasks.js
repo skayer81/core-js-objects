@@ -368,32 +368,59 @@ function group(array, keySelector, valueSelector) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  result: '',
+  element(value) {
+    this.result += value;
+    return this;
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    // throw new Error('Not implemented');
+    this.result = `${this.result}#${value}`;
+    return this;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    this.result = `${this.result}.${value}`;
+    return this;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    this.result = `${this.result}[${value}]`;
+    return this;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    this.result = `${this.result}:${value}`;
+    return this;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    this.result = `${this.result}::${value}`;
+    return this;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    // this.result = '';
+    //  console.debug('selector1', selector1.stringify());
+    // const s1 = selector2.result;
+    // this.result = '';
+    // const s2 = selector1.result;
+    console.debug(selector1, '----', selector2);
+    // this.result = `${s1} ${combinator} ${s2}`;
+    // this.result = ''
+    // const s1 = selector1.stringify();
+    // const s2 = selector2.stringify();
+    // console.debug('s1', s1, 'comb', combinator, 's2', s2);
+    //  this.result = `${s1} ${combinator} ${s2}`;
+    return this;
+    // throw new Error('Not implemented');
+  },
+  stringify() {
+    //  console.debug(this.result);
+    this.result2 = this.result;
+    this.result = '';
+    return this.result2;
   },
 };
 
