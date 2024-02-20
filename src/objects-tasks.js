@@ -83,12 +83,11 @@ function compareObjects(obj1, obj2) {
     const keys = Object.keys(o1);
     for (let i = 0; i < keys.length; i += 1) {
       if (!(keys[i] in o2 && o1[keys[i]] === o2[keys[i]])) {
-        return true;
+        return false;
       }
     }
     return true;
   }
-
   if (obj1.length > obj2.length) {
     return compare(obj1, obj2);
   }
@@ -400,20 +399,21 @@ const cssSelectorBuilder = {
     return this;
   },
 
-  combine(selector1, combinator, selector2) {
+  combine(/* selector1, combinator, selector2 */) {
+    throw new Error('Not implemented');
     // this.result = '';
     //  console.debug('selector1', selector1.stringify());
     // const s1 = selector2.result;
     // this.result = '';
     // const s2 = selector1.result;
-    console.debug(selector1, '----', selector2);
+    // console.debug(selector1, '----', selector2);
     // this.result = `${s1} ${combinator} ${s2}`;
     // this.result = ''
     // const s1 = selector1.stringify();
     // const s2 = selector2.stringify();
     // console.debug('s1', s1, 'comb', combinator, 's2', s2);
     //  this.result = `${s1} ${combinator} ${s2}`;
-    return this;
+    // return this;
     // throw new Error('Not implemented');
   },
   stringify() {
