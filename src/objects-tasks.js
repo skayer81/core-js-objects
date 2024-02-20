@@ -230,6 +230,8 @@ function getJSON(obj) {
  */
 function fromJSON(/* proto, json */) {
   throw new Error('Not implemented');
+  // console.debug(proto, json, JSON.parse(json));
+  // return Object.assign(proto, JSON.parse(json));
 }
 
 /**
@@ -258,8 +260,12 @@ function fromJSON(/* proto, json */) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  arr.sort((a, b) => {
+    if (a.country === b.country) return -(a.city < b.city);
+    return -(a.country < b.country);
+  });
+  return arr;
 }
 
 /**
