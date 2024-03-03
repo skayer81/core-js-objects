@@ -364,44 +364,123 @@ function group(array, keySelector, valueSelector) {
  *  For more examples see unit tests.
  */
 
+class BaseElementSelector {
+  ERROR_ORDER =
+    'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element';
+
+  ERROR_DUBBLE =
+    'Element, id and pseudo-element should not occur more then one time inside the selector';
+
+  result = '';
+
+  selectorsOrder = {
+    element: 1,
+    id: 2,
+    class: 3,
+    attribute: 4,
+    pseudoClass: 5,
+    pseudoElement: 6,
+  };
+
+  lastSelectorOrder = 0;
+
+  checkDubbleSelectors(order) {
+    if (order === this.lastSelectorOrder) {
+      throw new Error(this.ERROR_DUBBLE);
+    }
+  }
+
+  checkOrderSelectors(order) {
+    if (order < this.lastSelectorOrder) {
+      throw new Error(this.ERROR_ORDER);
+    }
+    this.lastSelectorOrder = order;
+  }
+
+  constructor(value) {
+    if (value) {
+      this.result = value;
+    }
+  }
+
+  element(value) {
+    this.checkDubbleSelectors(this.selectorsOrder.element);
+    this.checkOrderSelectors(this.selectorsOrder.element);
+    this.result += value;
+    return this;
+  }
+
+  id(value) {
+    this.checkDubbleSelectors(this.selectorsOrder.id);
+    this.checkOrderSelectors(this.selectorsOrder.id);
+    this.result = `${this.result}#${value}`;
+    return this;
+  }
+
+  class(value) {
+    this.checkOrderSelectors(this.selectorsOrder.class);
+    this.result = `${this.result}.${value}`;
+    return this;
+  }
+
+  attr(value) {
+    this.checkOrderSelectors(this.selectorsOrder.attribute);
+    this.result = `${this.result}[${value}]`;
+    return this;
+  }
+
+  pseudoClass(value) {
+    this.checkOrderSelectors(this.selectorsOrder.pseudoClass);
+    this.result = `${this.result}:${value}`;
+    return this;
+  }
+
+  pseudoElement(value) {
+    this.checkDubbleSelectors(this.selectorsOrder.pseudoElement);
+    this.checkOrderSelectors(this.selectorsOrder.pseudoElement);
+    this.result = `${this.result}::${value}`;
+    return this;
+  }
+
+  stringify() {
+    return this.result;
+  }
+}
+
 const cssSelectorBuilder = {
   result: '',
   element(value) {
-    this.result += value;
-    return this;
+    return new BaseElementSelector().element(value);
   },
 
   id(value) {
-    this.result = `${this.result}#${value}`;
-    return this;
+    return new BaseElementSelector().id(value);
   },
 
   class(value) {
-    this.result = `${this.result}.${value}`;
-    return this;
+    return new BaseElementSelector().class(value);
   },
 
   attr(value) {
-    this.result = `${this.result}[${value}]`;
-    return this;
+    return new BaseElementSelector().attr(value);
   },
 
   pseudoClass(value) {
-    this.result = `${this.result}:${value}`;
-    return this;
+    return new BaseElementSelector().pseudoClass(value);
   },
 
   pseudoElement(value) {
-    this.result = `${this.result}::${value}`;
-    return this;
+    return new BaseElementSelector().pseudoElement(value);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    return new BaseElementSelector(
+      `${selector1.result} ${combinator} ${selector2.result}`
+    );
   },
+
   stringify() {
-    throw new Error('Not implemented');
-    //    return this.result;
+    return new BaseElementSelector().stringify();
   },
 };
 
