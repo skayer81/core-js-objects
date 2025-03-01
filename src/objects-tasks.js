@@ -172,12 +172,11 @@ function sellTickets(queue) {
     if (many === sell) {
       sum += many;
     } else {
-      sum -= many - sell;
-    }
-    if (sum < 0) {
-      result = false;
+      if (many - sell > sum) result = false;
+      sum += many;
     }
   });
+  throw Error;
   return result;
 }
 
