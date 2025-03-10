@@ -176,7 +176,6 @@ function sellTickets(queue) {
       sum += many;
     }
   });
-  throw Error;
   return result;
 }
 
